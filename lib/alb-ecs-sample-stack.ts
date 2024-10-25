@@ -24,12 +24,7 @@ export class AlbEcsSampleStack extends cdk.Stack {
           cidrMask: 24,
           name: "Private",
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-        },
-        {
-          cidrMask: 28,
-          name: "Database",
-          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
-        },
+        }
       ],
     });
 
@@ -77,6 +72,13 @@ export class AlbEcsSampleStack extends cdk.Stack {
       port: 80,
       targets: [fargateService],
       healthCheck: { path: "/health" },
+    });
+    
+    // ALBのDNS名を出力
+    new cdk.CfnOutput(this, "AlbDnsName", {
+      value: alb.loadBalancerDnsName,
+      description: "The DNS name of the load balancer",
+      exportName: "AlbDnsName",
     });
   }
 }
